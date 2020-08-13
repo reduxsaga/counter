@@ -3,6 +3,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_saga/redux_saga.dart';
 
+//reducer
 int counterReducer(int state, dynamic action) {
   if (action is IncrementAction) {
     return state + 1;
