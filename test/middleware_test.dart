@@ -1,28 +1,29 @@
-import 'dart:math';
-
 import 'package:counter/main.dart';
 import 'package:redux_saga/redux_saga.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('Counter Middleware Tests', () {
+  group('Middleware Tests', () {
     test('incrementAsync Test', () {
-      Iterator iterator = incrementAsync().iterator;
+      Iterable gen = incrementAsync();
+
+      Iterator iterator = gen.iterator;
 
       iterator.moveNext();
 
-      //counter Saga must call Delay(Duration(seconds: 1))
-      expect(iterator.current, TypeMatcher<Delay>());
-      expect(iterator.current.duration, Duration(seconds: 1));
+      expect(iterator.current, TypeMatcher<Delay>(),
+          reason: 'incrementAsync should return a Delay effect');
+      expect(iterator.current.duration, Duration(seconds: 1),
+          reason: 'Delay effect must resolve after 1 second');
 
       iterator.moveNext();
 
-      //counter Saga must dispatch an INCREMENT action
-      expect(iterator.current, TypeMatcher<Put>());
-      expect(iterator.current.action, TypeMatcher<IncrementAction>());
+      expect(iterator.current, TypeMatcher<Put>(),
+          reason: 'incrementAsync should return a Put effect');
+      expect(iterator.current.action, TypeMatcher<IncrementAction>(),
+          reason: 'incrementAsync Saga must dispatch an IncrementAction action');
 
-      //counter Saga must be done
-      expect(iterator.moveNext(), false);
+      expect(iterator.moveNext(), false, reason: 'incrementAsync Saga must be done');
     });
   });
 }
